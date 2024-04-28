@@ -112,5 +112,30 @@ function updateAPost($conn, $new_description, $post_id) {
 	$stmt->execute([$new_description, $timeNow, $post_id]);
 }
 
+function addAComment($conn, $post_id, $user_id, $commentDescription) {
+	$sql = "
+			INSERT INTO comments (post_id, user_id, description)
+			VALUES (?,?,?)
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$post_id, $user_id, $commentDescription]);
+}
+
+function allCommentsByPost($conn, $post_id) {
+	$sql = "
+			SELECT 
+				c.description AS description,
+				c.date_added AS date_added,
+				u.username AS username
+			FROM comments c 
+			JOIN users u ON 
+			c.user_id = u.user_id
+			WHERE post_id = ?
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$post_id]);
+	return $stmt->fetchAll();
+}
+
 
 ?>

@@ -50,4 +50,10 @@ if (isset($_POST['updatePostBtn'])) {
 	header('Location: allYourPosts.php');
 }
 
+if (isset($_POST['addCommentBtn'])) {
+	$commentDescription = $_POST['commentDescription'];
+	addAComment($conn, $_GET['post_id'], $_SESSION['user_id'], $commentDescription);
+	header("Location: comments.php?post_id=" . $_GET['post_id']);
+}
+
 ?>

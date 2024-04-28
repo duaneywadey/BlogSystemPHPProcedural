@@ -77,16 +77,24 @@ if(!isset($_SESSION['username'])) {
 	</div>
 	<div class="commentSection">
 		<p>Add a comment here</p>
-		<form action="#">
-			<textarea name="comment" id=""></textarea>
-			<input type="submit" id="submitBtn" value="Submit">
+		<form action="handleForm.php?post_id=<?php echo $row['post_id']; ?>" method="POST">
+			<textarea name="commentDescription"></textarea>
+			<input type="submit" id="submitBtn" name="addCommentBtn" value="Submit">
 		</form>
 		<h2>All Comments</h2>
 	</div>
 	<?php } ?>
+
+	<?php 
+	$allComments = allCommentsByPost($conn, $_GET['post_id']);
+	foreach ($allComments as $row) {
+	?>
 	<div class="commentBox" style="width: 50%;border-style: solid; border-color: gray;">
-		<h3>User</h3>
-		<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa nesciunt id natus nostrum, blanditiis assumenda ipsa, nihil voluptatum sint aliquam necessitatibus. Eius fugit, eligendi aspernatur nihil consequuntur rem provident, dignissimos.</p>
+		<h3><?php echo $row['username']; ?></h3>
+		<p><i><?php echo $row['date_added']; ?></i></p>
+		<p><?php echo $row['description']; ?></p>
 	</div>
+	<?php } ?>
 </body>
 </html>
+
