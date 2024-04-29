@@ -1,17 +1,14 @@
 <?php 
 
-function addUser($conn, $username) {
+function addUser($conn, $username, $password) {
 	$sql = "SELECT * FROM users WHERE username=?";
 	$stmt = $conn->prepare($sql);
 	$stmt->execute([$username]);
 
-	if($stmt->rowCount()==1) {
-		return false;
-	}
-	else {
+	if($stmt->rowCount()==0) {
 		$sql = "INSERT INTO users (username,password) VALUES (?,?)";
 		$stmt = $conn->prepare($sql);
-		$stmt->execute([$username, $password]);
+		return $stmt->execute([$username, $password]);
 	}
 }
 
@@ -28,7 +25,7 @@ function login($conn, $username, $password) {
 		$_SESSION['userInfo'] = $row;
 
 		// get values from the session variable
-		$uid = $row['id'];
+		$uid = $row['user_id'];
 		$uname = $row['username'];
 		$passHash = $row['password'];
 
@@ -66,7 +63,7 @@ function getAllPosts($conn) {
 function getAllPostsByUser($conn, $user_logged_in) {
 	$sql = "
 			SELECT
-				u.id AS user_id, 
+				u.user_id AS user_id, 
 				u.username AS user_posted, 
 				p.post_id AS post_id,
 				p.description AS description,
@@ -74,8 +71,8 @@ function getAllPostsByUser($conn, $user_logged_in) {
 				p.last_updated AS last_updated
 			FROM users u
 			JOIN posts p ON 
-			u.id = p.user_posted 
-			WHERE u.id = ?
+			u.user_id = p.user_posted 
+			WHERE u.user_id = ?
 			";
 	$stmt = $conn->prepare($sql);
 	$stmt->execute([$user_logged_in]);

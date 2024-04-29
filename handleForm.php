@@ -6,19 +6,12 @@ require_once('functions.php');
 if (isset($_POST['regBtn'])) {
 	$username = $_POST['username'];
 	$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-	$query = "SELECT * FROM users WHERE username=?";
-	$stmt = $conn->prepare($query);
-	$stmt->execute([$username]);
-	
-	if($stmt->rowCount() == 1) {
-		header('Location: register.php');	
+
+	if(addUser($conn, $username, $password)) {
+		header('Location: index.php');
 	}
 	else {
-		$query = "INSERT INTO users (username,password) VALUES (?,?)";
-		$stmt = $conn->prepare($query);
-		$stmt->execute([$username, $password]);
-		$_SESSION['welcomeMessage'] = "Registered successfully!";
-		header('Location: index.php');
+		header('Location: register.php');
 	}
 	
 }
@@ -55,5 +48,4 @@ if (isset($_POST['addCommentBtn'])) {
 	addAComment($conn, $_GET['post_id'], $_SESSION['user_id'], $commentDescription);
 	header("Location: comments.php?post_id=" . $_GET['post_id']);
 }
-
 ?>
