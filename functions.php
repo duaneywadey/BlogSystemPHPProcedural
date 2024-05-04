@@ -54,6 +54,7 @@ function getAllPosts($conn) {
 			FROM users u
 			JOIN posts p ON 
 			u.user_id = p.user_posted
+			ORDER BY date_posted DESC
 			";
 	$stmt = $conn->prepare($sql);
 	$stmt->execute();
@@ -109,6 +110,9 @@ function updateAPost($conn, $new_description, $post_id) {
 	$stmt->execute([$new_description, $timeNow, $post_id]);
 }
 
+
+
+
 function addAComment($conn, $post_id, $user_id, $commentDescription) {
 	$sql = "
 			INSERT INTO comments (post_id, user_id, description)
@@ -121,6 +125,7 @@ function addAComment($conn, $post_id, $user_id, $commentDescription) {
 function allCommentsByPost($conn, $post_id) {
 	$sql = "
 			SELECT 
+				c.comment_id AS comment_id,
 				c.description AS description,
 				c.date_added AS date_added,
 				u.username AS username
@@ -132,6 +137,29 @@ function allCommentsByPost($conn, $post_id) {
 	$stmt = $conn->prepare($sql);
 	$stmt->execute([$post_id]);
 	return $stmt->fetchAll();
+}
+
+function getCommentByID($conn, $comment_id){
+	$sql = "
+		SELECT
+			description
+		FROM comments
+		WHERE comment_id = ? 
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$comment_id]);
+	return $stmt->fetchAll();
+}
+
+
+function editComment($conn, $new_comment_description, $comment_id) {
+	$sql = "
+			UPDATE comments
+			SET description = ?
+			WHERE comment_id = ?
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$new_comment_description, $comment_id]);
 }
 
 

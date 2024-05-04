@@ -48,4 +48,11 @@ if (isset($_POST['addCommentBtn'])) {
 	addAComment($conn, $_GET['post_id'], $_SESSION['user_id'], $commentDescription);
 	header("Location: comments.php?post_id=" . $_GET['post_id']);
 }
+
+if(isset($_POST['updateCommentBtn'])) {
+	$newCommentDescription = $_POST['newCommentDescription'];
+	editComment($conn, $newCommentDescription, $_GET['comment_id']);
+	header("Location: comments.php?post_id=" . $_GET['post_id']);
+
+}
 ?>

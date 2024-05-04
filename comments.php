@@ -89,9 +89,10 @@ if(!isset($_SESSION['username'])) {
 	$allComments = allCommentsByPost($conn, $_GET['post_id']);
 	foreach ($allComments as $row) {
 	?>
-	<div class="commentBox" style="width: 50%;border-style: solid; border-color: gray;">
+	<div class="commentBox" style="width: 50%;border-style: solid; border-color: gray; margin-top:10px;">
 		<h3><?php echo $row['username']; ?></h3>
 		<p><i><?php echo $row['date_added']; ?></i></p>
+		<a href="editComment.php?post_id=<?php echo $_GET['post_id']?>&comment_id=<?php echo $row['comment_id'];?>">Edit</a>
 		<p><?php echo $row['description']; ?></p>
 	</div>
 	<?php } ?>
