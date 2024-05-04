@@ -54,6 +54,7 @@ if(!isset($_SESSION['username'])) {
 				<td>Posted By</td>
 				<td>Date posted</td>
 				<td>Last updated</td>
+				<td>Action</td>
 			</tr>
 
 			<?php $allPostsByUser = getAllPostsByUser($conn, $_SESSION['user_id']); ?>
@@ -63,6 +64,11 @@ if(!isset($_SESSION['username'])) {
 					<td><?php echo $key['user_posted']; ?></td>
 					<td><?php echo $key['date_posted']; ?></td>
 					<td><?php echo $key['last_updated']; ?></td>
+					<td>
+						<form action="handleForm.php?post_id=<?php echo $key['post_id']; ?>" method="POST">
+							<input type="submit" value="Delete" style="width:200px; font-size: 1em;" name="deletePostBtn">
+						</form>
+					</td>
 				</tr>
 			<?php } ?>
 		</table>

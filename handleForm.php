@@ -43,6 +43,11 @@ if (isset($_POST['updatePostBtn'])) {
 	header('Location: allYourPosts.php');
 }
 
+if(isset($_POST['deletePostBtn'])) {
+	deleteAPost($conn, $_GET['post_id']);
+	header('Location: allYourPosts.php');
+}
+
 if (isset($_POST['addCommentBtn'])) {
 	$commentDescription = $_POST['commentDescription'];
 	addAComment($conn, $_GET['post_id'], $_SESSION['user_id'], $commentDescription);

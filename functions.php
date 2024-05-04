@@ -110,7 +110,15 @@ function updateAPost($conn, $new_description, $post_id) {
 	$stmt->execute([$new_description, $timeNow, $post_id]);
 }
 
-
+function deleteAPost($conn, $post_id) {
+	$sql = "
+			DELETE FROM posts
+			WHERE post_id = ?
+			";
+	
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$post_id]);
+}
 
 
 function addAComment($conn, $post_id, $user_id, $commentDescription) {
@@ -160,6 +168,15 @@ function editComment($conn, $new_comment_description, $comment_id) {
 			";
 	$stmt = $conn->prepare($sql);
 	$stmt->execute([$new_comment_description, $comment_id]);
+}
+
+function deleteAComment($conn, $comment_id) {
+	$sql = "
+			DELETE FROM comments
+			WHERE comment_id = ?
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$comment_id]);
 }
 
 
