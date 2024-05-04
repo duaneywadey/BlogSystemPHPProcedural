@@ -49,14 +49,30 @@ if(isset($_POST['deletePostBtn'])) {
 }
 
 if (isset($_POST['addCommentBtn'])) {
+	
 	$commentDescription = $_POST['commentDescription'];
-	addAComment($conn, $_GET['post_id'], $_SESSION['user_id'], $commentDescription);
-	header("Location: comments.php?post_id=" . $_GET['post_id']);
+
+	if(!empty($commentDescription)) {
+		addAComment($conn, $_GET['post_id'], $_SESSION['user_id'], $commentDescription);
+		header("Location: comments.php?post_id=" . $_GET['post_id']);
+	}
+
+	else {
+		echo "<h2>Please don't leave the field empty</h2>
+		<a href=comments.php?post_id=" . $_GET['post_id'] . ">Return</a>";
+	}
+	
 }
 
 if(isset($_POST['updateCommentBtn'])) {
 	$newCommentDescription = $_POST['newCommentDescription'];
 	editComment($conn, $newCommentDescription, $_GET['comment_id']);
+	header("Location: comments.php?post_id=" . $_GET['post_id']);
+
+}
+
+if (isset($_POST['deleteCommentBtn'])) {
+	deleteAComment($conn, $_GET['comment_id']);
 	header("Location: comments.php?post_id=" . $_GET['post_id']);
 
 }

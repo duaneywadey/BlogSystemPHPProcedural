@@ -133,6 +133,7 @@ function addAComment($conn, $post_id, $user_id, $commentDescription) {
 function allCommentsByPost($conn, $post_id) {
 	$sql = "
 			SELECT 
+				c.user_id AS user_id,
 				c.comment_id AS comment_id,
 				c.description AS description,
 				c.date_added AS date_added,

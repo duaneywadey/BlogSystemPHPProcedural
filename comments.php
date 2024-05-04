@@ -59,6 +59,16 @@ if(!isset($_SESSION['username'])) {
 			width: 200px;
 			font-size: 1.5em;
 		}
+		.link-button { 
+	     background: none;
+	     border: none;
+	     color: #1a0dab;
+	     text-decoration: underline;
+	     cursor: pointer; 
+	     font-size: 1em;
+
+	 	}
+
 		#greeting {
 			font-family: Arial, Helvetica, sans-serif;
 		}
@@ -92,7 +102,13 @@ if(!isset($_SESSION['username'])) {
 	<div class="commentBox" style="width: 50%;border-style: solid; border-color: gray; margin-top:10px;">
 		<h3><?php echo $row['username']; ?></h3>
 		<p><i><?php echo $row['date_added']; ?></i></p>
-		<a href="editComment.php?post_id=<?php echo $_GET['post_id']?>&comment_id=<?php echo $row['comment_id'];?>">Edit</a>
+		<?php if($_SESSION['user_id'] == $row['user_id']) { ?>		
+		<form action="handleForm.php?post_id=<?php echo $_GET['post_id']?>&comment_id=<?php echo $row['comment_id'];?>" method="POST">
+			<a href="editComment.php?post_id=<?php echo $_GET['post_id']?>&comment_id=<?php echo $row['comment_id'];?>">Edit</a>
+			<input type="submit" value="Delete" class="link-button" name="deleteCommentBtn">
+		</form>
+		<?php } ?>
+
 		<p><?php echo $row['description']; ?></p>
 	</div>
 	<?php } ?>
