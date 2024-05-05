@@ -43,6 +43,12 @@ function login($conn, $username, $password) {
 	}
 }
 
+function makeAPost($conn, $description, $user_posted) {
+	$sql = "INSERT INTO posts (description, user_posted) VALUES(?,?)";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$description, $user_posted]);
+}
+
 function getAllPosts($conn) {
 	$sql = "
 			SELECT 
