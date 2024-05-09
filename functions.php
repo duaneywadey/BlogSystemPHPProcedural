@@ -186,5 +186,29 @@ function deleteAComment($conn, $comment_id) {
 	$stmt->execute([$comment_id]);
 }
 
+function addNewLikeToPost($conn, $post_id, $user_id) {
+
+	$sql = "
+			SELECT * FROM likesfromposts 
+			WHERE post_id = ? AND user_id = ?
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$post_id, $user_id]);
+
+	if($stmt->rowCount()==0) {
+		$sql = "
+			INSERT INTO likesfromposts (post_id,user_id)
+			VALUES(?,?)
+			";
+		$stmt = $conn->prepare($sql);
+		return $stmt->execute([$post_id, $user_id]);
+	}
+	else {
+		return false;
+	}
+
+	
+}
+
 
 ?>

@@ -31,12 +31,13 @@ if (isset($_POST['loginBtn'])) {
 	$username = $_POST['username'];
 	$password = $_POST['password'];
 
-	if(empty($username) && empty($password)) {
+	if(empty($username) || empty($password)) {
 		echo "<script>
 		alert('Input fields are empty!');
 		window.location.href='index.php'
 		</script>";
 	} 
+	
 	else {
 
 		if(login($conn, $username, $password)) {
@@ -55,15 +56,16 @@ if(isset($_POST['makePostBtn'])) {
 	$postDescription = $_POST['postDescription'];
 	$user_id = $_SESSION['user_id'];
 
-	if(empty($postDescription)) {
+	if(!empty($postDescription)) {
+		makeAPost($conn, trim($postDescription), $user_id);
+		header('Location: index.php');
+	}
+
+	else {
 		echo "<script>
 		alert('Post is empty'); 
 		window.location.href='makePost.php'
-		</script>";
-	}
-	else {
-		makeAPost($conn, $postDescription, $user_id);
-		header('Location: index.php');
+		</script>";	
 	}
 	
 }
@@ -72,15 +74,16 @@ if (isset($_POST['updatePostBtn'])) {
 	
 	$postDescription = $_POST['postDescription'];
 
-	if(empty($postDescription)) {
+	if(!empty($postDescription)) {
+		updateAPost($conn, trim($postDescription), $_GET['post_id']);
+		header('Location: allYourPosts.php');
+	}
+
+	else {
 		echo "<script>
 		alert('Post is empty'); 
 		window.location.href='editPost.php?post_id=" . $_GET['post_id'] . "'
 		</script>";
-	}
-	else {
-		updateAPost($conn, $postDescription, $_GET['post_id']);
-		header('Location: allYourPosts.php');
 	}
 	
 }
@@ -94,17 +97,17 @@ if (isset($_POST['addCommentBtn'])) {
 	
 	$commentDescription = $_POST['commentDescription'];
 
-	if(empty($commentDescription)) {
-		echo '<script> 
-		alert("The input field is empty!");
-		window.location.href = "comments.php?post_id=' . $_GET['post_id'] . '";
-		</script>';
-	}
-	else {
-		addAComment($conn, $_GET['post_id'], $_SESSION['user_id'], $commentDescription);
+	if(!empty($commentDescription)) {
+		addAComment($conn, $_GET['post_id'], $_SESSION['user_id'], trim($commentDescription));
 		header("Location: comments.php?post_id=" . $_GET['post_id']);
 	}
-
+	else {
+		echo "
+		<script> 
+			alert('The input field is empty!');
+			window.location.href = 'comments.php?post_id=" . $_GET['post_id'] . "';
+		</script>";
+	}
 
 }
 
@@ -112,15 +115,17 @@ if(isset($_POST['updateCommentBtn'])) {
 	
 	$newCommentDescription = $_POST['newCommentDescription'];
 
-	if(empty($newCommentDescription)) {
-		echo '<script>
-		alert("The input field is empty!")
-		window.location.href = "comments.php?post_id=' . $_GET['post_id'] .'
-		"</script>';
-	}
-	else {
-		editComment($conn, $newCommentDescription, $_GET['comment_id']);
+	if(!empty($newCommentDescription)) {
+		editComment($conn, trim($newCommentDescription), $_GET['comment_id']);
 		header("Location: comments.php?post_id=" . $_GET['post_id']);
+	}
+
+	else {
+		echo "
+		<script>
+			alert('The input field is empty!')
+			window.location.href = 'comments.php?post_id=" . $_GET['post_id'] ."'
+		</script>";
 	}
 
 }
@@ -128,7 +133,19 @@ if(isset($_POST['updateCommentBtn'])) {
 if (isset($_POST['deleteCommentBtn'])) {
 	deleteAComment($conn, $_GET['comment_id']);
 	header("Location: comments.php?post_id=" . $_GET['post_id']);
-
 }
 
+if(isset($_POST['likeBtn'])) {
+	if (addNewLikeToPost($conn, $_GET['post_id'], $_SESSION['user_id'])) {
+		header("Location: comments.php?post_id=" . $_GET['post_id']);
+	}
+	else {
+		echo "
+		<script>
+			alert('Post already liked!');
+			window.location.href='comments.php?post_id=" . $_GET['post_id']. "'
+		</script>
+		";
+	}
+}
 ?>

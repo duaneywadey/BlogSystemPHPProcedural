@@ -10,5 +10,4 @@ $conn = new PDO($dsn, $user, $password);
 $conn->exec("SET time_zone = '+08:00';");
 
 
-
 ?>

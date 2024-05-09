@@ -71,8 +71,7 @@ if (isset($_GET['comment_id'])) {
 	<?php foreach ($commentByID as $row) { ?>
 	<div class="fields">
 		<form action="handleForm.php?post_id=<?php echo $_GET['post_id']?>&comment_id=<?php echo $_GET['comment_id']; ?>" method="POST">
-			<textarea name="newCommentDescription" id="" rows="5">
-				<?php echo $row['description']; ?>
+			<textarea name="newCommentDescription" id="" rows="4"><?php echo $row['description']; ?>
 			</textarea>
 			<input type="submit" value="Submit" name="updateCommentBtn">
 		</form>

@@ -71,8 +71,7 @@ if (isset($_GET['post_id'])) {
 	<div class="fields">
 		<form action="handleForm.php?post_id=<?php echo $_GET['post_id']; ?>" method="POST">
 			<?php foreach ($postInfo as $row) { ?>
-			<textarea name="postDescription" id="" rows="5">
-				<?php echo $row['description']; ?>
+			<textarea name="postDescription" id="" rows="5"><?php echo $row['description']; ?>
 			</textarea>
 			<?php } ?>
 			<input type="submit" value="Submit" name="updatePostBtn">

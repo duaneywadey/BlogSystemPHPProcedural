@@ -84,6 +84,9 @@ if(!isset($_SESSION['username'])) {
 		<h1><?php echo $row['username']; ?></h1>
 		<p><i><?php echo $row['date_posted'];?></i></p>
 		<p><?php echo $row['description']; ?></p>
+		<form action="handleForm.php?post_id=<?php echo $row['post_id']; ?>" method="POST">
+			<input type="submit" name="likeBtn" id="submitBtn" value="Like">
+		</form>
 	</div>
 	<div class="commentSection">
 		<p>Add a comment here</p>
