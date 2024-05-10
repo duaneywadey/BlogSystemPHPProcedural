@@ -12,5 +12,8 @@
 		<li>
 			<a href="logout.php">Logout</a>
 		</li>
+		<li>
+			<a href="changePassword.php">Change Password</a>
+		</li>
 	</ul>
 </div>

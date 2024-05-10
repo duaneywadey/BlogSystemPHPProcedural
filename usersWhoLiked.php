@@ -4,6 +4,11 @@ session_start();
 require_once('dbConfig.php');
 require_once('functions.php');
 
+if(!isset($_SESSION['username'])) {
+	header('Location: login.php');
+}
+
+
 ?>
 
 <!DOCTYPE html>

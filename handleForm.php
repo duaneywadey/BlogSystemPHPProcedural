@@ -51,6 +51,13 @@ if (isset($_POST['loginBtn'])) {
 	
 }
 
+if(isset($_POST['changePasswordBtn'])) {
+	$password = $_POST['password'];
+	$newPassword = $_POST['newPassword'];
+	changePassword($conn, $_SESSION['user_id'], $password, $newPassword);
+	header('Location: allYourPosts.php');
+}
+
 if(isset($_POST['makePostBtn'])) {
 	
 	$postDescription = $_POST['postDescription'];

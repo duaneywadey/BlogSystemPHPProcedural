@@ -43,6 +43,24 @@ function login($conn, $username, $password) {
 	}
 }
 
+function changePassword($conn, $user_id, $password, $newPassword) {
+	$sql = "SELECT * FROM users WHERE user_id=?";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$user_id]);
+	$userInfo = $stmt->fetch();
+	$passHash = $userInfo['password'];
+
+	if(password_verify($password, $passHash)) {
+		$newPassHash = password_hash($newPassword, PASSWORD_DEFAULT);
+		$sql = "UPDATE users 
+				SET password = ? 
+				WHERE user_id = ?";
+		$stmt = $conn->prepare($sql);
+		$stmt->execute([$newPassHash, $user_id]);	
+	}
+}
+
+
 function makeAPost($conn, $description, $user_posted) {
 	$sql = "INSERT INTO posts (description, user_posted) VALUES(?,?)";
 	$stmt = $conn->prepare($sql);
