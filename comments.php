@@ -83,10 +83,22 @@ if(!isset($_SESSION['username'])) {
 	<div class="postSection" style="border: solid 4px;">
 		<h1><?php echo $row['username']; ?></h1>
 		<p><i><?php echo $row['date_posted'];?></i></p>
+		<p>
+			Total likes:
+			<a href="usersWhoLiked.php?post_id=<?php echo $row['post_id']; ?>">
+				<?php 
+				$likesArray = countNumOfLikes($conn, $row['post_id']);
+				foreach ($likesArray as $like) {
+					echo $like['like_count'];
+				}
+				?>
+			</a>
+		</p>
 		<p><?php echo $row['description']; ?></p>
 		<form action="handleForm.php?post_id=<?php echo $row['post_id']; ?>" method="POST">
 			<input type="submit" name="likeBtn" id="submitBtn" value="Like">
 		</form>
+
 	</div>
 	<div class="commentSection">
 		<p>Add a comment here</p>

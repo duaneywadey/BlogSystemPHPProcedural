@@ -206,8 +206,33 @@ function addNewLikeToPost($conn, $post_id, $user_id) {
 	else {
 		return false;
 	}
-
 	
+}
+
+function countNumOfLikes($conn, $post_id) {
+	$sql = "
+			SELECT COUNT(*) AS like_count
+			FROM likesfromposts
+			WHERE post_id = ?
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$post_id]);
+	return $stmt->fetchAll();
+}
+
+function usersWhoLiked($conn, $post_id) {
+	$sql = "
+			SELECT 
+				u.username AS username, 
+				l.date_added AS date_added
+			FROM users u
+			JOIN likesfromposts l 
+			ON u.user_id = l.user_id
+			WHERE l.post_id = ?
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$post_id]);
+	return $stmt->fetchAll();
 }
 
 
