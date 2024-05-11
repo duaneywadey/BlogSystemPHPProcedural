@@ -47,7 +47,7 @@ if(isset($_GET['post_id'])) {
 	</tr>
 <?php }}?>
 </table>
-<a href="index.php">Return</a>
+<a href="comments.php?post_id=<?php echo $_GET['post_id']; ?>">Return</a>
 </body>
 </html>
 

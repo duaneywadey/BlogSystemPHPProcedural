@@ -94,10 +94,29 @@ if(!isset($_SESSION['username'])) {
 				?>
 			</a>
 		</p>
+		
 		<p><?php echo $row['description']; ?></p>
+
+		<?php  
+
+		$usersWhoLiked = usersWhoLiked($conn, $row['post_id']);
+		$usersList = array(); 
+		foreach ($usersWhoLiked as $user) {
+			array_push($usersList, $user['username']);
+		}
+
+		?>
+
+		<?php if(in_array($_SESSION['username'], $usersList)) { ?>
 		<form action="handleForm.php?post_id=<?php echo $row['post_id']; ?>" method="POST">
-			<input type="submit" name="likeBtn" id="submitBtn" value="Like">
+			<input type="submit" name="unlikeBtn" id="submitBtn" value="Unlike">
 		</form>
+
+		<?php } else { ?>
+			<form action="handleForm.php?post_id=<?php echo $row['post_id']; ?>" method="POST">
+				<input type="submit" name="likeBtn" id="submitBtn" value="Like">
+			</form>
+		<?php } ?>
 
 	</div>
 	<div class="commentSection">

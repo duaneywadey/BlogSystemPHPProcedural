@@ -54,8 +54,27 @@ if (isset($_POST['loginBtn'])) {
 if(isset($_POST['changePasswordBtn'])) {
 	$password = $_POST['password'];
 	$newPassword = $_POST['newPassword'];
-	changePassword($conn, $_SESSION['user_id'], $password, $newPassword);
-	header('Location: allYourPosts.php');
+
+	if(!empty($password) && !empty($newPassword)) {
+
+		if (changePassword($conn, $_SESSION['user_id'], $password, $newPassword)) {
+			header('Location: allYourPosts.php');
+		}
+		else {
+			echo "<script>
+					alert('Passwords dont match!');
+					window.location.href = 'changePassword.php'
+				</script>";
+		}
+	}
+	else {
+		echo "<script>
+				alert('Dont leave the fields blank!');
+				window.location.href = 'changePassword.php'
+			</script>
+			";
+	}
+	
 }
 
 if(isset($_POST['makePostBtn'])) {
@@ -155,4 +174,10 @@ if(isset($_POST['likeBtn'])) {
 		";
 	}
 }
+
+if(isset($_POST['unlikeBtn'])) {
+	unlikeAPost($conn, $_GET['post_id'], $_SESSION['user_id']);
+	header("Location: comments.php?post_id=" . $_GET['post_id']);
+}
+
 ?>

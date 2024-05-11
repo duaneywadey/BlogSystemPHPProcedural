@@ -58,6 +58,9 @@ function changePassword($conn, $user_id, $password, $newPassword) {
 		$stmt = $conn->prepare($sql);
 		$stmt->execute([$newPassHash, $user_id]);	
 	}
+	else {
+		return false;
+	}
 }
 
 
@@ -225,6 +228,15 @@ function addNewLikeToPost($conn, $post_id, $user_id) {
 		return false;
 	}
 	
+}
+
+function unlikeAPost($conn, $post_id, $user_id) {
+	$sql = "
+			DELETE FROM likesfromposts
+			WHERE post_id = ? AND user_id = ?
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$post_id, $user_id]);
 }
 
 function countNumOfLikes($conn, $post_id) {
