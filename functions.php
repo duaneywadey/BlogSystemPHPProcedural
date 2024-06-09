@@ -265,5 +265,50 @@ function usersWhoLiked($conn, $post_id) {
 	return $stmt->fetchAll();
 }
 
+function seeAllUsers($conn)
+{
+	$sql = "SELECT * FROM users";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute();
+	return $stmt->fetchAll();
+}
+
+function sendAFriendRequest($conn, $userWhoAdded, $userBeingAdded)
+{
+	$sql = "INSERT INTO friends (userWhoAdded, userBeingAdded) VALUES(?,?)";
+	$stmt = $conn->prepare($sql);
+	return $stmt->execute([$userWhoAdded, $userBeingAdded]);
+}
+
+function seeAllAddedFriends($conn, $userWhoAdded)
+{
+	$sql = "SELECT 
+				users.username AS username, 
+				friends.userBeingAdded AS userBeingAdded, 
+				friends.dateFriendRequestSent AS dateFriendRequestSent
+			FROM users
+			JOIN friends ON friends.userBeingAdded = users.user_id
+			WHERE friends.userWhoAdded = ?
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$userWhoAdded]);
+	return $stmt->fetchAll();
+}
+
+function seeAllFriendRequests($conn, $userBeingAdded)
+{
+	$sql = "SELECT
+				users.username AS username,
+				friends.userWhoAdded AS userWhoAdded,
+				friends.dateFriendRequestSent AS dateFriendRequestSent
+			FROM users
+			JOIN friends ON friends.userWhoAdded = users.user_id
+			WHERE friends.userBeingAdded = ?
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$userBeingAdded]);
+	return $stmt->fetchAll();
+}
+
 
 ?>

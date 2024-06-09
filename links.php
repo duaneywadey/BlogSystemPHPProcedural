@@ -10,6 +10,12 @@
 			<a href="makePost.php">New Post</a>
 		</li>
 		<li>
+			<a href="findfriends.php">Find Friends</a>
+		</li>
+		<li>
+			<a href="friendrequests.php">Friend Requests</a>
+		</li>
+		<li>
 			<a href="logout.php">Logout</a>
 		</li>
 		<li>

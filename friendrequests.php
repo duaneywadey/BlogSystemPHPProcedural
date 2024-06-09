@@ -9,12 +9,6 @@ if(!isset($_SESSION['username'])) {
 }
 
 
-// if(isset($_SESSION['userInfo'])) {
-// 	$userInfo = $_SESSION['userInfo'];
-// 	foreach ($userInfo as $key => $value) {
-// 		echo $key . " - " . $value . "<br>";
-// 	}
-// }
 
 ?>
 <!DOCTYPE html>
@@ -55,18 +49,27 @@ if(!isset($_SESSION['username'])) {
 <body>
 	<div id="greeting">
 		<h1>Hello there,
-			<?php if(isset($_SESSION['username'])) { 
-				echo $_SESSION['username'];
-			}?>
+		<?php if(isset($_SESSION['username'])) { 
+			echo $_SESSION['username'];
+		}?>
 		</h1>
 	</div>
 	<?php include('links.php'); ?>
-	<form action="handleForm.php" method="POST" class="fields">
-		<p>Type your old password here</p>
-		<input type="password" name="password">
-		<p>Type your new password here</p>
-		<input type="password" name="newPassword">
-		<input type="submit" name="changePasswordBtn">
-	</form>
+	<h2>Friend Requests</h2>
+	<table>
+		<tr>
+			<th>Username</th>
+			<th>Date Sent</th>
+			<th>Action</th>
+		</tr>
+		<?php $seeAllFriendRequests = seeAllFriendRequests($conn, $_SESSION['user_id']); ?>
+		<?php foreach ($seeAllFriendRequests as $row) { ?>
+		<tr>
+			<td><?php echo $row['username']; ?></td>
+			<td><?php echo $row['dateFriendRequestSent']; ?></td>
+			<td><input type="submit" value="Accept"></td>
+		</tr>
+		<?php } ?>
+	</table>
 </body>
 </html>

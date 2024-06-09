@@ -180,4 +180,11 @@ if(isset($_POST['unlikeBtn'])) {
 	header("Location: comments.php?post_id=" . $_GET['post_id']);
 }
 
+if (isset($_POST['addFriendBtn'])) {
+	$friendBeingAdded = $_POST['friendBeingAdded'];
+	if(sendAFriendRequest($conn, $_SESSION['user_id'], $friendBeingAdded)) {
+		header("Location: findfriends.php");
+	}
+}
+
 ?>
