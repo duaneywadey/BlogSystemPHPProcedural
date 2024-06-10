@@ -67,7 +67,12 @@ if(!isset($_SESSION['username'])) {
 		<tr>
 			<td><?php echo $row['username']; ?></td>
 			<td><?php echo $row['dateFriendRequestSent']; ?></td>
-			<td><input type="submit" value="Accept"></td>
+			<td>
+				<form action="handleForm.php" method="POST">
+					<input type="hidden" value="<?php echo $row['friend_id']; ?>" name="friend_id">
+					<input type="submit" value="Accept" name="acceptFriendRequestBtn">
+				</form>
+			</td>
 		</tr>
 		<?php } ?>
 	</table>

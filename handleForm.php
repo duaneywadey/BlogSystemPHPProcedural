@@ -187,4 +187,11 @@ if (isset($_POST['addFriendBtn'])) {
 	}
 }
 
+if (isset($_POST['acceptFriendRequestBtn'])) {
+	$friend_id = $_POST['friend_id'];
+	if(acceptAFriendRequest($conn, $friend_id)) {
+		header('Location: friendrequests.php');
+	}
+}
+
 ?>

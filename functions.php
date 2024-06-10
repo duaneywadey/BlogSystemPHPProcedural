@@ -265,11 +265,11 @@ function usersWhoLiked($conn, $post_id) {
 	return $stmt->fetchAll();
 }
 
-function seeAllUsers($conn)
+function seeAllUsers($conn, $user_id)
 {
-	$sql = "SELECT * FROM users";
+	$sql = "SELECT * FROM users WHERE NOT user_id =?";
 	$stmt = $conn->prepare($sql);
-	$stmt->execute();
+	$stmt->execute([$user_id]);
 	return $stmt->fetchAll();
 }
 
@@ -298,15 +298,46 @@ function seeAllAddedFriends($conn, $userWhoAdded)
 function seeAllFriendRequests($conn, $userBeingAdded)
 {
 	$sql = "SELECT
+				friends.friend_id AS friend_id,
 				users.username AS username,
 				friends.userWhoAdded AS userWhoAdded,
 				friends.dateFriendRequestSent AS dateFriendRequestSent
 			FROM users
 			JOIN friends ON friends.userWhoAdded = users.user_id
-			WHERE friends.userBeingAdded = ?
+			WHERE friends.userBeingAdded = ? AND friends.isAccepted = 0
 			";
 	$stmt = $conn->prepare($sql);
 	$stmt->execute([$userBeingAdded]);
+	return $stmt->fetchAll();
+}
+
+function acceptAFriendRequest($conn, $friend_id)
+{
+	$sql = "UPDATE friends SET isAccepted = 1 WHERE friend_id = ?";
+	$stmt = $conn->prepare($sql);
+	return $stmt->execute([$friend_id]);
+}
+
+function seeAllFriends($conn, $user_id)
+{
+	$sql = "SELECT
+				users.username AS username,
+				friends.userWhoAdded AS userWhoAdded,
+				friends.dateFriendRequestSent AS dateFriendRequestSent
+			FROM users
+			JOIN friends ON friends.userWhoAdded = users.user_id
+			WHERE friends.userBeingAdded = ? AND friends.isAccepted = 1
+			UNION
+			SELECT
+				users.username AS username,
+				friends.userBeingAdded AS userBeingAdded,
+				friends.dateFriendRequestSent AS dateFriendRequestSent
+			FROM users
+			JOIN friends ON friends.userBeingAdded = users.user_id
+			WHERE friends.userWhoAdded = ? AND friends.isAccepted = 1
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$user_id, $user_id]);
 	return $stmt->fetchAll();
 }
 

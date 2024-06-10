@@ -54,40 +54,17 @@ if(!isset($_SESSION['username'])) {
 		</h1>
 	</div>
 	<?php include('links.php'); ?>
-	<div class="findFriends">
+	<div class="showAllFriends">
 		<h1>Find friends</h1>
 		<table>
 			<tr>
 				<th>Username</th>
-				<th>Action</th>
 			</tr>
-			<?php $seeAllUsers = seeAllUsers($conn, $_SESSION['user_id']); ?>
-			<?php foreach ($seeAllUsers as $row) { ?>
+			<?php $seeAllFriends = seeAllFriends($conn, $_SESSION['user_id']); ?>
+			<?php foreach ($seeAllFriends as $row) { ?>
 				<tr>
 					<td><?php echo $row['username']; ?></td>
-					<td>
-						<form action="handleForm.php" method="POST">
-							<input type="hidden" value="<?php echo $row['user_id']; ?>" name="friendBeingAdded">
-							<input type="submit" value="Add Friend" name="addFriendBtn">
-						</form>
-					</td>
 				</tr>
-			<?php } ?>
-		</table>
-	</div>
-	<div class="addedFriends">
-		<h1>Friend Requests Sent</h1>
-		<table>
-			<tr>
-				<th>Username</th>
-				<th>Date Added</th>
-			</tr>
-			<?php $seeAllAddedFriends = seeAllAddedFriends($conn, $_SESSION['user_id']); ?>
-			<?php foreach ($seeAllAddedFriends as $row) { ?>
-			<tr>
-				<td><?php echo $row['username']; ?></td>
-				<td><?php echo $row['dateFriendRequestSent']; ?></td>
-			</tr>
 			<?php } ?>
 		</table>
 	</div>

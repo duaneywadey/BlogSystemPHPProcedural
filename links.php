@@ -10,6 +10,9 @@
 			<a href="makePost.php">New Post</a>
 		</li>
 		<li>
+			<a href="showallfriends.php">Friends</a>
+		</li>
+		<li>
 			<a href="findfriends.php">Find Friends</a>
 		</li>
 		<li>
