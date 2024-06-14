@@ -267,9 +267,22 @@ function usersWhoLiked($conn, $post_id) {
 
 function seeAllUsers($conn, $user_id)
 {
-	$sql = "SELECT * FROM users WHERE NOT user_id =?";
+	$sql = "SELECT * FROM users WHERE NOT user_id = ? 
+			AND username NOT IN (
+			SELECT
+				users.username AS username
+			FROM users
+			JOIN friends ON friends.userWhoAdded = users.user_id
+			WHERE friends.userBeingAdded = ? AND friends.isAccepted = 1
+			UNION
+			SELECT
+				users.username AS username
+			FROM users
+			JOIN friends ON friends.userBeingAdded = users.user_id
+			WHERE friends.userWhoAdded = ? AND friends.isAccepted = 1)
+			";
 	$stmt = $conn->prepare($sql);
-	$stmt->execute([$user_id]);
+	$stmt->execute([$user_id, $user_id, $user_id]);
 	return $stmt->fetchAll();
 }
 
@@ -288,7 +301,7 @@ function seeAllAddedFriends($conn, $userWhoAdded)
 				friends.dateFriendRequestSent AS dateFriendRequestSent
 			FROM users
 			JOIN friends ON friends.userBeingAdded = users.user_id
-			WHERE friends.userWhoAdded = ?
+			WHERE friends.userWhoAdded = ? AND friends.isAccepted = 0 
 			";
 	$stmt = $conn->prepare($sql);
 	$stmt->execute([$userWhoAdded]);
