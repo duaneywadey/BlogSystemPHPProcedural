@@ -311,11 +311,14 @@ function seeAllFriendRequests($conn, $userBeingAdded)
 	return $stmt->fetchAll();
 }
 
-function acceptAFriendRequest($conn, $friend_id)
+function acceptAFriendRequest($conn, $dateFriendRequestAccepted, $friend_id)
 {
-	$sql = "UPDATE friends SET isAccepted = 1 WHERE friend_id = ?";
+	$sql = "UPDATE friends 
+			SET isAccepted = 1, 
+				dateFriendRequestAccepted = ? 
+			WHERE friend_id = ?";
 	$stmt = $conn->prepare($sql);
-	return $stmt->execute([$friend_id]);
+	return $stmt->execute([$dateFriendRequestAccepted, $friend_id]);
 }
 
 function seeAllFriends($conn, $user_id)
@@ -323,6 +326,7 @@ function seeAllFriends($conn, $user_id)
 	$sql = "SELECT
 				users.username AS username,
 				friends.userWhoAdded AS userWhoAdded,
+				friends.dateFriendRequestAccepted AS dateFriendRequestAccepted,
 				friends.dateFriendRequestSent AS dateFriendRequestSent
 			FROM users
 			JOIN friends ON friends.userWhoAdded = users.user_id
@@ -331,6 +335,7 @@ function seeAllFriends($conn, $user_id)
 			SELECT
 				users.username AS username,
 				friends.userBeingAdded AS userBeingAdded,
+				friends.dateFriendRequestAccepted AS dateFriendRequestAccepted,
 				friends.dateFriendRequestSent AS dateFriendRequestSent
 			FROM users
 			JOIN friends ON friends.userBeingAdded = users.user_id

@@ -80,7 +80,7 @@ if(!isset($_SESSION['username'])) {
 		<table>
 			<tr>
 				<th>Username</th>
-				<th>Date Added</th>
+				<th>Friend Request Sent Date</th>
 			</tr>
 			<?php $seeAllAddedFriends = seeAllAddedFriends($conn, $_SESSION['user_id']); ?>
 			<?php foreach ($seeAllAddedFriends as $row) { ?>

@@ -59,11 +59,13 @@ if(!isset($_SESSION['username'])) {
 		<table>
 			<tr>
 				<th>Username</th>
+				<th>Friend Request Accepted</th>
 			</tr>
 			<?php $seeAllFriends = seeAllFriends($conn, $_SESSION['user_id']); ?>
 			<?php foreach ($seeAllFriends as $row) { ?>
 				<tr>
 					<td><?php echo $row['username']; ?></td>
+					<td><?php echo $row['dateFriendRequestAccepted']; ?></td>
 				</tr>
 			<?php } ?>
 		</table>
