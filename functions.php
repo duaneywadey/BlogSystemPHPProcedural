@@ -337,6 +337,7 @@ function acceptAFriendRequest($conn, $dateFriendRequestAccepted, $friend_id)
 function seeAllFriends($conn, $user_id)
 {
 	$sql = "SELECT
+				friends.friend_id AS friend_id,
 				users.username AS username,
 				friends.userWhoAdded AS userWhoAdded,
 				friends.dateFriendRequestAccepted AS dateFriendRequestAccepted,
@@ -346,6 +347,7 @@ function seeAllFriends($conn, $user_id)
 			WHERE friends.userBeingAdded = ? AND friends.isAccepted = 1
 			UNION
 			SELECT
+				friends.friend_id AS friend_id,
 				users.username AS username,
 				friends.userBeingAdded AS userBeingAdded,
 				friends.dateFriendRequestAccepted AS dateFriendRequestAccepted,
@@ -359,5 +361,12 @@ function seeAllFriends($conn, $user_id)
 	return $stmt->fetchAll();
 }
 
+function unfriendAUser($conn, $friend_id)
+{
+	$sql = "DELETE FROM friends WHERE friend_id = ?";
+	$stmt = $conn->prepare($sql);
+	return $stmt->execute([$friend_id]);
+	
+}
 
 ?>

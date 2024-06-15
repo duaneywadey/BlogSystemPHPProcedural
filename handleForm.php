@@ -194,4 +194,11 @@ if (isset($_POST['acceptFriendRequestBtn'])) {
 	}
 }
 
+if (isset($_POST['unfriendUserBtn'])) {
+	$friend_id = $_POST['friend_id'];
+	if(unfriendAUser($conn, $friend_id)) {
+		header('Location: showallfriends.php');
+	}
+}
+
 ?>

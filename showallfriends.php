@@ -60,12 +60,19 @@ if(!isset($_SESSION['username'])) {
 			<tr>
 				<th>Username</th>
 				<th>Friend Request Accepted</th>
+				<th>Unfriend</th>
 			</tr>
 			<?php $seeAllFriends = seeAllFriends($conn, $_SESSION['user_id']); ?>
 			<?php foreach ($seeAllFriends as $row) { ?>
 				<tr>
 					<td><?php echo $row['username']; ?></td>
 					<td><?php echo $row['dateFriendRequestAccepted']; ?></td>
+					<td>
+						<form action="handleForm.php" method="POST">
+							<input type="hidden" value="<?php echo $row['friend_id']; ?>" name="friend_id">
+							<input type="submit" name="unfriendUserBtn" value="Unfriend">
+						</form>
+					</td>
 				</tr>
 			<?php } ?>
 		</table>
