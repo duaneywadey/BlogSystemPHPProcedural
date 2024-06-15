@@ -61,6 +61,7 @@ if(!isset($_SESSION['username'])) {
 		</h1>
 	</div>
 	<?php include('links.php'); ?>
+	<h1>Your friend's posts</h1>
 	<div id="table">
 		<table>
 			<tr>
@@ -69,7 +70,7 @@ if(!isset($_SESSION['username'])) {
 				<td>Date Posted</td>
 				<td>Last Updated</td>
 			</tr>
-			<?php $allPosts = getAllPosts($conn); ?>
+			<?php $allPosts = getAllPosts($conn, $_SESSION['user_id']); ?>
 			<?php foreach ($allPosts as $row) { ?>
 			<tr>
 				<td>

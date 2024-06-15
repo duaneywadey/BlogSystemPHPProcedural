@@ -1,5 +1,8 @@
 <?php 
 
+require_once('dbConfig.php');
+require_once('functions.php');
+
 function addUser($conn, $username, $password) {
 	$sql = "SELECT * FROM users WHERE username=?";
 	$stmt = $conn->prepare($sql);
@@ -70,21 +73,34 @@ function makeAPost($conn, $description, $user_posted) {
 	$stmt->execute([$description, $user_posted]);
 }
 
-function getAllPosts($conn) {
+function getAllPosts($conn, $userLoggedIn) {
 	$sql = "
 			SELECT 
-				u.username AS user_posted, 
-				p.post_id AS post_id,
-				p.description AS description,
-				p.date_posted AS date_posted,
-				p.last_updated AS last_updated
-			FROM users u
-			JOIN posts p ON 
-			u.user_id = p.user_posted
-			ORDER BY date_posted DESC
+			    users.username AS user_posted, 
+			    posts.post_id AS post_id,
+			    posts.description AS description,
+			    posts.date_posted AS date_posted,
+			    posts.last_updated AS last_updated
+			FROM users 
+			JOIN posts ON 
+			    users.user_id = posts.user_posted
+			WHERE users.user_id = ? OR users.user_id IN (
+			SELECT
+				users.user_id AS user_id
+			FROM users
+			JOIN friends ON friends.userWhoAdded = users.user_id
+			WHERE friends.userBeingAdded = ? AND friends.isAccepted = 1
+			UNION
+			SELECT
+				users.user_id AS user_id
+			FROM users
+			JOIN friends ON friends.userBeingAdded = users.user_id
+			WHERE friends.userWhoAdded = ? AND friends.isAccepted = 1
+			)
+			ORDER BY posts.date_posted DESC
 			";
 	$stmt = $conn->prepare($sql);
-	$stmt->execute();
+	$stmt->execute([$userLoggedIn, $userLoggedIn, $userLoggedIn]);
 	return $stmt->fetchAll();
 }
 
@@ -368,5 +384,12 @@ function unfriendAUser($conn, $friend_id)
 	return $stmt->execute([$friend_id]);
 	
 }
+
+// For testing purposes
+
+// $getAllPosts = getAllPosts($conn, 34, 34, 34);
+// echo "<pre>";
+// print_r($getAllPosts);
+// echo "<pre>";
 
 ?>
